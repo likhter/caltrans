@@ -10,26 +10,30 @@
     <div class="loader" data-bind="visible: isLoading">Loading...</div>
     <div class="error" data-bind="visible: isError">Error. Please reload.</div>
 
-    <div id="roadlist" data-bind="foreach: conditions">
-      <div>
-        <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
-        <span data-bind="text: $data.name"></span>
-      </div>
-    </div>
+    <div id="app" data-bind="visible: isVisible">
 
-    <ul class="roads" data-bind="foreach: filteredConditions">
-      <li class="road">
-        <div class="name" data-bind="text: $data.name"></div>
-        <ul data-bind="foreach: $data.entries">
-          <li class="region">
-            <div class="name" data-bind="text: $data.name"></div>
-            <ul data-bind="foreach: $data.entries">
-              <li class="paragraph" data-bind="html: _vm.highlight($data)"></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
+      <div id="roadlist" data-bind="foreach: conditions">
+        <div>
+          <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
+          <span data-bind="text: $data.name"></span>
+        </div>
+      </div>
+
+      <ul class="roads" data-bind="foreach: filteredConditions">
+        <li class="road">
+          <div class="name" data-bind="text: $data.name"></div>
+          <ul data-bind="foreach: $data.entries">
+            <li class="region">
+              <div class="name" data-bind="text: $data.name"></div>
+              <ul data-bind="foreach: $data.entries">
+                <li class="paragraph" data-bind="html: _vm.highlight($data)"></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
     <script src="http://knockoutjs.com/downloads/knockout-3.4.1.js"></script>
     <script src="caltrans.js"></script>
   </body>

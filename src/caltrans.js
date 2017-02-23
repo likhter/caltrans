@@ -25,6 +25,8 @@ const VM = function VM() {
       .replace(/NO TRAFFIC RESTRICTIONS/g, '<span class="green">NO TRAFFIC RESTRICTIONS</span>')
   );
 
+  this.isVisible = ko.computed(() => !this.isLoading(), this);
+
   this.filteredConditions = ko.computed(() => {
     const count = this.checkedRoads().length;
     return this.conditions().filter(c => {
@@ -54,7 +56,10 @@ const VM = function VM() {
         } 
         this.isLoading(false);
       })
-      .catch(e => console.log('err=', e));
+      .catch(e => {
+        console.log('err=', e);
+        this.isError(true);
+      });
   };
 };
 

@@ -4,21 +4,7 @@
   <head>
     <meta charset="UTF-8"/>
     <title>Caltrans &mdash; road conditions</title>
-    <style type="text/css">
-      .red { background-color: red; color: white; }
-      .green { background-color: lightgreen; }
-      .pink { background-color: pink; color: red;}
-      .place { background-color: #ededed; }
-      .road .name { font-size: 25pt; }
-      .road .region .name { font-size: 15pt; } 
-      body { font-family: Verdana, sans-serif; width: 90%; margin: 50px auto 0 auto; } 
-      #roadlist div { display: inline-block; width: 90px; } 
-      #roadlist div:hover { background-color: #e8e8e8; }
-      ul li.paragraph { padding: 2px; } 
-      li.road { border: solid 1px white; } 
-      li.road:hover { border: solid 1px gray; } 
-      li.paragraph:hover { background-color: #e8e8e8; }
-    </style>
+    <link rel="stylesheet" href="caltrans.css"/>
   </head>
   <body>
     <div class="loader" data-bind="visible: isLoading">Loading...</div>

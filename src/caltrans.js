@@ -49,12 +49,14 @@ const VM = function VM() {
         const checkedRoads = localStorage.getItem(CHECKED_ROADS_KEY);
         try {
           this.checkedRoads(JSON.parse(checkedRoads));
-        } catch(e) {} 
+        } catch(e) {
+          this.checkedRoads([]);
+        } 
         this.isLoading(false);
       })
       .catch(e => console.log('err=', e));
   };
 };
 
-ko.applyBindings(_vm = new VM());
+ko.applyBindings(window._vm = _vm =  new VM());
 _vm.start();

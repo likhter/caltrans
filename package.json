@@ -6,5 +6,22 @@
     "express": "^4.14.1",
     "ioredis": "^2.5.0",
     "node-fetch": "^1.6.3"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.1.8",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "less": "^2.7.2",
+    "less-plugin-clean-css": "^1.5.1",
+    "uglify-js": "^2.7.5",
+    "watch": "^1.0.2"
+  },
+  "scripts": {
+    "build-js": "browserify src/caltrans.js -t [ babelify --comments false ] | uglifyjs > public/caltrans.js",
+    "build-css": "lessc --clean-css src/caltrans.less public/caltrans.css",
+    "build": "npm run build-js && npm run build-css",
+    "watch": "watch 'npm run build' src/",
+    "start": "node server/main.js",
+    "clean": "rm public/*.css && rm public/*.js"
   }
 }

@@ -1,0 +1,56 @@
+@defaultGrey: #e8e8e8;
+
+body {
+  font-family: Verdana, sans-serif;
+  width: 90%;
+  margin: 50px auto 0 auto;
+}
+
+.road {
+  .name { font-size: 25pt; }
+  .region {
+    .name { font-size: 15pt; }
+  }
+}
+
+#roadlist {
+  div {
+    display: inline-block;
+    width: 90px;
+    &:hover {
+      background-color: @defaultGrey;
+    }
+  }
+}
+
+ul {
+  li {
+    &.paragraph {
+      padding: 2px;
+      &:hover {
+        background-color: @defaultGrey;
+      }
+    }
+    &.road {
+      border: solid 1px white;
+      &:hover { border: solid 1px @defaultGrey; }
+    }
+  }
+}
+
+span {
+  &.red { 
+    background-color: red;
+    color: white;
+  }
+  &.green {
+    background-color: lightgreen;
+  }
+  &.pink {
+    background-color: pink;
+    color: red;
+  }
+  &.place {
+    background-color: #ededed;
+  }
+}

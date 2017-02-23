@@ -8,6 +8,8 @@ const CHECKED_ROADS_KEY = 'checked_roads';
 const VM = function VM() {
   this.isLoading = ko.observable(false);
   this.isError = ko.observable(false);
+  this.lastUpdate = ko.observable(0);
+  this.updateInterval = ko.observable();
   this.roads = ko.observableArray([]);
   this.conditions = ko.observableArray([]);
 
@@ -27,6 +29,17 @@ const VM = function VM() {
 
   this.isVisible = ko.computed(() => !this.isLoading(), this);
 
+  this.lastUpdateReadable = ko.computed(() => {
+    const d = new Date(+this.lastUpdate());
+    let h = d.getHours(),
+      m = d.getMinutes();
+
+    if (h < 10) h = '0' + h;
+    if (m < 10) m = '0' + m;
+    return h + ':' + m;
+  }, this);
+  this.updateIntervalReadable = ko.computed(() => (this.updateInterval() / 1000 / 60) + ' min', this)
+
   this.filteredConditions = ko.computed(() => {
     const count = this.checkedRoads().length;
     return this.conditions().filter(c => {
@@ -39,6 +52,11 @@ const VM = function VM() {
     localStorage.setItem(CHECKED_ROADS_KEY, JSON.stringify(val));
   });
 
+  this.startReloadTimer = () => {
+    if (this.timeout) { setTimeout(this.timeout); }
+    setTimeout(this.start.bind(this), this.updateInterval());
+  };
+
 
   this.start = () => {
     this.isLoading(true);
@@ -46,8 +64,9 @@ const VM = function VM() {
       .then(fetch.bind(null, API + 'everything'))
       .then(response => response.json())
       .then(result => {
-        this.roads(result.roads);
-        this.conditions(result.conditions);
+        ['roads', 'conditions', 'lastUpdate', 'updateInterval'].forEach(fn => {
+          this[fn](result[fn]);
+        });
         const checkedRoads = localStorage.getItem(CHECKED_ROADS_KEY);
         try {
           this.checkedRoads(JSON.parse(checkedRoads));
@@ -55,6 +74,7 @@ const VM = function VM() {
           this.checkedRoads([]);
         } 
         this.isLoading(false);
+        this.startReloadTimer();
       })
       .catch(e => {
         console.log('err=', e);

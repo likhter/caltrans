@@ -6,52 +6,63 @@ body {
   margin: 50px auto 0 auto;
 }
 
-.road {
-  .name { font-size: 25pt; }
-  .region {
-    .name { font-size: 15pt; }
-  }
-}
-
-#roadlist {
-  div {
-    display: inline-block;
-    width: 90px;
-    &:hover {
-      background-color: @defaultGrey;
+#app {
+  #dt {
+    padding: 1em 1em 1em 0;
+    span {
+      font-weight: bold;
     }
   }
-}
 
-ul {
-  li {
-    &.paragraph {
-      padding: 2px;
+  #roads {
+    .road {
+      .name { font-size: 25pt; }
+      .region {
+        .name { font-size: 15pt; }
+      }
+    }
+  }
+
+  #roadlist {
+    div {
+      display: inline-block;
+      width: 90px;
       &:hover {
         background-color: @defaultGrey;
       }
     }
-    &.road {
-      border: solid 1px white;
-      &:hover { border: solid 1px @defaultGrey; }
+  }
+
+  ul {
+    li {
+      &.paragraph {
+        padding: 2px;
+        &:hover {
+          background-color: @defaultGrey;
+        }
+      }
+      &.road {
+        border: solid 1px white;
+        &:hover { border: solid 1px @defaultGrey; }
+      }
     }
   }
-}
 
-span {
-  &.red { 
-    background-color: red;
-    color: white;
-  }
-  &.green {
-    background-color: lightgreen;
-  }
-  &.pink {
-    background-color: pink;
-    color: red;
-  }
-  &.place {
-    background-color: #ededed;
+  span {
+    &.red { 
+      background-color: red;
+      color: white;
+    }
+    &.green {
+      background-color: lightgreen;
+    }
+    &.pink {
+      background-color: pink;
+      color: red;
+    }
+    &.place {
+      background-color: #ededed;
+    }
   }
 }
 

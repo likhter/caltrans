@@ -12,6 +12,11 @@
 
     <div id="app" data-bind="visible: isVisible">
 
+      <div id="dt">
+        Last update: <span class="last" data-bind="text: lastUpdateReadable"></span>, 
+        reloads every <span class="reloading" data-bind="text: updateIntervalReadable"></span>
+      </div>
+
       <div id="roadlist" data-bind="foreach: conditions">
         <div>
           <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
@@ -19,7 +24,7 @@
         </div>
       </div>
 
-      <ul class="roads" data-bind="foreach: filteredConditions">
+      <ul id="roads" data-bind="foreach: filteredConditions">
         <li class="road">
           <div class="name" data-bind="text: $data.name"></div>
           <ul data-bind="foreach: $data.entries">

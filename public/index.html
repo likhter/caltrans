@@ -3,13 +3,17 @@
 <html>
   <head>
     <meta charset="UTF-8"/>
-    <title>Caltrans &mdash; road conditions</title>
+    <title>Caltrans &mdash; California road conditions</title>
     <link rel="stylesheet" href="caltrans.css"/>
   </head>
   <body>
     <div class="loader" data-bind="visible: isLoading">Loading...</div>
     <div class="error" data-bind="visible: isError">Error. Please reload.</div>
 
+    <div id="top">
+      <div class="logo">CALIFORNIA ROAD CONDITIONS</div>
+      <div class="disclaimer">(unofficial interface using caltrans data)</div>
+    </div>
     <div id="app" data-bind="visible: isVisible">
 
       <div id="dt">
@@ -28,10 +32,10 @@
       <ul id="roads" data-bind="foreach: filteredConditions">
         <li class="road">
           <div class="name" data-bind="text: $data.name"></div>
-          <ul data-bind="foreach: $data.entries">
+          <ul class="regions" data-bind="foreach: $data.entries">
             <li class="region">
               <div class="name" data-bind="text: $data.name"></div>
-              <ul data-bind="foreach: $data.entries">
+              <ul class="conditions" data-bind="foreach: $data.entries">
                 <li class="paragraph" data-bind="html: _vm.highlight($data)"></li>
               </ul>
             </li>

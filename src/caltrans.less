@@ -1,10 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Space+Mono:400,700');
+
 @defaultGrey: #e8e8e8;
 @darkerGrey: darken(@defaultGrey, 20%);
 
 body {
-  font-family: Verdana, sans-serif;
+  font-family: 'Space Mono', monospace;
   width: 90%;
   margin: 50px auto 0 auto;
+}
+
+#top {
+  position: absolute;
+  right: 10%;
+  text-align: center;
+  .logo {
+    font-size: xx-large;
+    color: darkblue;
+  }
+  .disclaimer {
+    font-size: small;
+  }
 }
 
 #app {
@@ -20,7 +35,8 @@ body {
   }
 
   #roads {
-    flex: 1;
+    flex: 1;    
+    list-style: none;
     .road {
       .name { font-size: 25pt; }
       .region {
@@ -28,17 +44,22 @@ body {
       }
     }
 
-    ul {
+    ul.regions {
+      list-style: none;
       li {
-        &.paragraph {
-          padding: 2px;
-          &:hover {
-            background-color: @defaultGrey;
+        ul.conditions {
+          li {
+            &.paragraph {
+              padding: 2px;
+              &:hover {
+                background-color: @defaultGrey;
+              }
+            }
+            &.road {
+              border: solid 1px white;
+              &:hover { border: solid 1px @defaultGrey; }
+            }
           }
-        }
-        &.road {
-          border: solid 1px white;
-          &:hover { border: solid 1px @defaultGrey; }
         }
       }
     }

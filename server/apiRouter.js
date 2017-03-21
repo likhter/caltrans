@@ -21,7 +21,7 @@ function fetchAndSave() {
       .then(res => parse(res.split("\n")))
       .then(parsed => Promise.all([
         redisClient.set(CONDITIONS_KEY, JSON.stringify(parsed.conditions)),
-        redisClient.set(ROADS_KEY, JSON.stringify(parsed.roads)),
+        redisClient.sadd(ROADS_KEY, parsed.roads),
         redisClient.set(UPDATE_KEY, Date.now())
       ]))
       .then(resolve)
@@ -32,12 +32,11 @@ function fetchAndSave() {
 router.get('/everything', (req, res) => {
   Promise.all([
     redisClient.get(CONDITIONS_KEY),
-    redisClient.get(ROADS_KEY),
+    redisClient.smembers(ROADS_KEY),
     redisClient.get(UPDATE_KEY)
   ]).then(([conditions, roads, lastUpdate]) => {
     try {
       conditions = JSON.parse(conditions);
-      roads = JSON.parse(roads);
     } catch(e) {
       throw 'update is needed';
     }

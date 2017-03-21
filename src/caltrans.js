@@ -64,9 +64,17 @@ const VM = function VM() {
       .then(fetch.bind(null, API + 'everything'))
       .then(response => response.json())
       .then(result => {
-        ['roads', 'conditions', 'lastUpdate', 'updateInterval'].forEach(fn => {
+        ['conditions', 'lastUpdate', 'updateInterval'].forEach(fn => {
           this[fn](result[fn]);
         });
+        this.roads(
+          result.roads.map(x => ({ 
+            name: x, 
+            modifier: x.split(' ')[0], 
+            number: +x.split(' ')[1] 
+          }))
+          .sort((a, b) => a.number > b.number ? 1 : -1)
+        );
         const checkedRoads = localStorage.getItem(CHECKED_ROADS_KEY);
         try {
           this.checkedRoads(JSON.parse(checkedRoads));

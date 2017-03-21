@@ -17,10 +17,11 @@
         reloads every <span class="reloading" data-bind="text: updateIntervalReadable"></span>
       </div>
 
-      <div id="roadlist" data-bind="foreach: conditions">
+      <div id="roadlist" data-bind="foreach: roads">
         <div>
           <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
-          <span data-bind="text: $data.name"></span>
+          <div class="modifier" data-bind="text: $data.modifier"></div>
+          <span class="number" data-bind="text: $data.number"></span>
         </div>
       </div>
 

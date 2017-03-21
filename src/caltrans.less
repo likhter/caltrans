@@ -1,4 +1,5 @@
 @defaultGrey: #e8e8e8;
+@darkerGrey: darken(@defaultGrey, 20%);
 
 body {
   font-family: Verdana, sans-serif;
@@ -7,7 +8,11 @@ body {
 }
 
 #app {
+  display: flex;
+  flex-flow: row wrap;
+
   #dt {
+    flex: 1 100%;
     padding: 1em 1em 1em 0;
     span {
       font-weight: bold;
@@ -15,35 +20,44 @@ body {
   }
 
   #roads {
+    flex: 1;
     .road {
       .name { font-size: 25pt; }
       .region {
         .name { font-size: 15pt; }
       }
     }
-  }
 
-  #roadlist {
-    div {
-      display: inline-block;
-      width: 90px;
-      &:hover {
-        background-color: @defaultGrey;
+    ul {
+      li {
+        &.paragraph {
+          padding: 2px;
+          &:hover {
+            background-color: @defaultGrey;
+          }
+        }
+        &.road {
+          border: solid 1px white;
+          &:hover { border: solid 1px @defaultGrey; }
+        }
       }
     }
   }
 
-  ul {
-    li {
-      &.paragraph {
-        padding: 2px;
-        &:hover {
-          background-color: @defaultGrey;
-        }
+  #roadlist {
+    div {
+      &:hover {
+        background-color: @defaultGrey;
       }
-      &.road {
-        border: solid 1px white;
-        &:hover { border: solid 1px @defaultGrey; }
+      input { display: inline-block; }
+      .modifier {
+        color: @darkerGrey;
+        width: 20px;
+        display: inline-block;
+      }
+      .number { 
+        font-weight: bold; 
+        display: inline-block;
       }
     }
   }

@@ -23,6 +23,7 @@ const VM = function VM() {
         + '</span> ')
       .replace(/CLOSED/g, '<span class="red">CLOSED</span>')
       .replace(/REOPENED/g, '<span class="green">REOPENED</span>')
+      .replace(/CHAINS OR SNOW TIRES ARE REQUIRED/g, '<span class="pink">CHAINS OR SNOW TIRES ARE REQUIRED</span>')
       .replace(/CHAINS ARE REQUIRED/g, '<span class="pink">CHAINS ARE REQUIRED</span>')
       .replace(/NO TRAFFIC RESTRICTIONS/g, '<span class="green">NO TRAFFIC RESTRICTIONS</span>')
   );

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "author": "Konstantin Likhter <konstantin@likhter.com>",
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.14.1",
     "ioredis": "^2.5.0",
     "node-fetch": "^1.6.3"

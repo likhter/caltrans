@@ -62,7 +62,7 @@ const VM = function VM() {
   this.start = () => {
     this.isLoading(true);
     fetch(API + 'update')
-      .then(fetch.bind(null, API + 'everything'))
+      .then(() => fetch(API + 'everything'))
       .then(response => response.json())
       .then(result => {
         ['conditions', 'lastUpdate', 'updateInterval'].forEach(fn => {

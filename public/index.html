@@ -21,6 +21,9 @@
         reloads every <span class="reloading" data-bind="text: updateIntervalReadable"></span>
       </div>
 
+      <div>
+        <button data-bind="click: showAll">Show all</button>
+      </div>
       <div id="roadlist" data-bind="foreach: roads">
         <div>
           <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>

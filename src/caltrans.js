@@ -12,8 +12,11 @@ const VM = function VM() {
   this.updateInterval = ko.observable();
   this.roads = ko.observableArray([]);
   this.conditions = ko.observableArray([]);
-
   this.checkedRoads = ko.observableArray([]);
+
+  this.showAll = () => {
+    this.checkedRoads([]);
+  };
 
   this.highlight = str => ( 
     str
@@ -23,8 +26,7 @@ const VM = function VM() {
         + '</span> ')
       .replace(/CLOSED/g, '<span class="red">CLOSED</span>')
       .replace(/REOPENED/g, '<span class="green">REOPENED</span>')
-      .replace(/CHAINS OR SNOW TIRES ARE REQUIRED/g, '<span class="pink">CHAINS OR SNOW TIRES ARE REQUIRED</span>')
-      .replace(/CHAINS ARE REQUIRED/g, '<span class="pink">CHAINS ARE REQUIRED</span>')
+      .replace(/(CHAINS .* REQUIRED)/g, '<span class="pink">$1</span>')
       .replace(/NO TRAFFIC RESTRICTIONS/g, '<span class="green">NO TRAFFIC RESTRICTIONS</span>')
   );
 
@@ -43,14 +45,24 @@ const VM = function VM() {
 
   this.filteredConditions = ko.computed(() => {
     const count = this.checkedRoads().length;
-    return this.conditions().filter(c => {
-      if (count == 0) return true;
-      return this.checkedRoads().includes(c.name);
-    });
+    if (count === 0) {
+      return this.conditions();
+    }
+    const checked = {};
+    this.checkedRoads().forEach(cr => { checked[cr] = true; });
+    return this.conditions().filter(c => checked[c.name]);;
   }, this);
 
   this.checkedRoads.subscribe(val => {
     localStorage.setItem(CHECKED_ROADS_KEY, JSON.stringify(val));
+    if (val.length > 0) {
+      location.hash = '#' + val.map(cr => cr.replace(/\D/g, ''))
+                               .sort((a, b) => a - b)
+                               .join(',');
+    }
+    else {
+      location.hash = '';
+    }
   });
 
   this.startReloadTimer = () => {
@@ -58,6 +70,31 @@ const VM = function VM() {
     setTimeout(this.start.bind(this), this.updateInterval());
   };
 
+  this.getCheckedRoads = () => {
+    if (location.hash.match(/^#[\d,]*$/)) {
+      const regexp = new RegExp(
+        location.hash
+          .substr(1)
+          .split(',')
+          .map(cr => cr.match(/^\d+$/) ? `^[A-Z]+ ${cr}$` : `^${cr}$`)
+          .join('|')
+      );
+      return this.roads().filter(r => r.name.match(regexp)).map(r => r.name);
+    }
+    const fromStorage = localStorage.getItem(CHECKED_ROADS_KEY);
+    if (fromStorage) {
+      try {
+        return JSON.parse(fromStorage);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  };
+
+  this.updateCheckedRoads = () => {
+    this.checkedRoads(this.getCheckedRoads());
+  };
 
   this.start = () => {
     this.isLoading(true);
@@ -76,12 +113,7 @@ const VM = function VM() {
           }))
           .sort((a, b) => a.number > b.number ? 1 : -1)
         );
-        const checkedRoads = localStorage.getItem(CHECKED_ROADS_KEY);
-        try {
-          this.checkedRoads(JSON.parse(checkedRoads));
-        } catch(e) {
-          this.checkedRoads([]);
-        } 
+        this.updateCheckedRoads();
         this.isLoading(false);
         this.startReloadTimer();
       })
@@ -94,3 +126,7 @@ const VM = function VM() {
 
 ko.applyBindings(window._vm = _vm =  new VM());
 _vm.start();
+
+window.onhashchange = () => {
+  _vm.updateCheckedRoads();
+};

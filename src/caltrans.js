@@ -20,10 +20,7 @@ const VM = function VM() {
 
   this.highlight = str => ( 
     str
-      .replace(/\s\/[^\d]+\/\s/g, found => 
-        ' <span class="place">' 
-        + found.replace(/^\s+/, '').replace(/\s+$/, '') 
-        + '</span> ')
+      .replace(/\s\/[^\d]+\/\s/g, found => ` <span class="place">${found.trim()}</span> `)
       .replace(/CLOSED/g, '<span class="red">CLOSED</span>')
       .replace(/REOPENED/g, '<span class="green">REOPENED</span>')
       .replace(/(CHAINS .* REQUIRED)/g, '<span class="pink">$1</span>')
@@ -48,9 +45,8 @@ const VM = function VM() {
     if (count === 0) {
       return this.conditions();
     }
-    const checked = {};
-    this.checkedRoads().forEach(cr => { checked[cr] = true; });
-    return this.conditions().filter(c => checked[c.name]);;
+    const checked = new Set(this.checkedRoads());
+    return this.conditions().filter(c => checked.has(c.name));
   }, this);
 
   this.checkedRoads.subscribe(val => {
@@ -125,8 +121,7 @@ const VM = function VM() {
 };
 
 ko.applyBindings(window._vm = _vm =  new VM());
+window.addEventListener('hashchange',() => _vm.updateCheckedRoads());
+
 _vm.start();
 
-window.onhashchange = () => {
-  _vm.updateCheckedRoads();
-};

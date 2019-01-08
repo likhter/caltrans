@@ -26,6 +26,17 @@ body {
   display: flex;
   flex-flow: row wrap;
 
+  button {
+    background-color: @defaultGrey;
+    border: 0;
+    padding: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+      background-color: @darkerGrey;
+    }
+  }
+
   #dt {
     flex: 1 100%;
     padding: 1em 1em 1em 0;

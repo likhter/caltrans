@@ -37,7 +37,7 @@ body {
     }
   }
 
-  #dt {
+  #dt, #buttonContainer {
     flex: 1 100%;
     padding: 1em 1em 1em 0;
     span {
@@ -49,7 +49,19 @@ body {
     flex: 1;    
     list-style: none;
     .road {
-      .name { font-size: 25pt; }
+      .name { 
+        font-size: 25pt; 
+        cursor: pointer;
+        display: inline-block;
+      }
+      .badge-container {
+        display: none;
+        position: relative;
+        top: -4pt;
+        span {
+          padding: 5px;
+        }
+      }
       .region {
         .name { font-size: 15pt; }
       }
@@ -73,6 +85,11 @@ body {
           }
         }
       }
+    }
+
+    &.compactMode {
+      .badge-container { display: inline-block; }
+      ul.regions { display: none; }
     }
   }
 

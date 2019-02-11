@@ -21,20 +21,29 @@
         reloads every <span class="reloading" data-bind="text: updateIntervalReadable"></span>
       </div>
 
-      <div>
+      <div id="buttonContainer">
         <button data-bind="click: showAll">Reset filter</button>
-        <div id="roadlist" data-bind="foreach: roads">
-          <div>
-            <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
-            <div class="modifier" data-bind="text: $data.modifier"></div>
-            <span class="number" data-bind="text: $data.number"></span>
-          </div>
+        <button data-bind="click: toggleCompactMode">Toggle compact mode</button>
+      </div>
+
+
+      <div id="roadlist" data-bind="foreach: roads">
+        <div>
+          <input type="checkbox" data-bind="checkedValue: $data.name, checked: $root.checkedRoads, attr: { id: 'road'+name }"/>
+          <div class="modifier" data-bind="text: $data.modifier"></div>
+          <span class="number" data-bind="text: $data.number"></span>
         </div>
       </div>
 
-      <ul id="roads" data-bind="foreach: filteredConditions">
+
+      <ul id="roads" data-bind="foreach: filteredConditions, css: { 'compactMode': isCompactMode }">
         <li class="road">
-          <div class="name" data-bind="text: $data.name"></div>
+          <div class="name" data-bind="text: $data.name, click: _vm.onRoadClick"></div>
+          <div class="badge-container">
+            <span class="red" data-bind="visible: $data.hasClosures">closure</span>
+            <span class="pink" data-bind="visible: $data.hasChainControls">chain control</span>
+            <span class="green" data-bind="visible:!$data.hasRestrictions">no restrictions</span>
+          </div>
           <ul class="regions" data-bind="foreach: $data.entries">
             <li class="region">
               <div class="name" data-bind="text: $data.name"></div>

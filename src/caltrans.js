@@ -4,6 +4,7 @@ let _vm;
 
 const API = '/api/';
 const CHECKED_ROADS_KEY = 'checked_roads';
+const COMPACT_MODE_KEY = 'is_compact_mode';
 
 const VM = function VM() {
   this.isLoading = ko.observable(false);
@@ -28,6 +29,7 @@ const VM = function VM() {
   );
 
   this.isVisible = ko.computed(() => !this.isLoading(), this);
+  this.isCompactMode = ko.observable(false);
 
   this.lastUpdateReadable = ko.computed(() => {
     const d = new Date(+this.lastUpdate());
@@ -61,6 +63,8 @@ const VM = function VM() {
     }
   });
 
+  this.isCompactMode.subscribe(value => localStorage.setItem(COMPACT_MODE_KEY, value));
+
   this.startReloadTimer = () => {
     if (this.timeout) { setTimeout(this.timeout); }
     setTimeout(this.start.bind(this), this.updateInterval());
@@ -92,8 +96,20 @@ const VM = function VM() {
     this.checkedRoads(this.getCheckedRoads());
   };
 
+  this.toggleCompactMode = () => {
+    this.isCompactMode(!this.isCompactMode());
+  };
+
+  this.onRoadClick = (road, ev) => {
+    const target = ev.target;
+    this.isCompactMode(false);
+    target.scrollIntoView();
+  }
+
   this.start = () => {
     this.isLoading(true);
+    // local storage can not save boolean values
+    this.isCompactMode(localStorage.getItem(COMPACT_MODE_KEY) === "true" || false);
     fetch(API + 'update')
       .then(() => fetch(API + 'everything'))
       .then(response => response.json())

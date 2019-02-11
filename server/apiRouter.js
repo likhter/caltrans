@@ -17,7 +17,7 @@ const {
 async function fetchAndSave() {
     const response = await fetch(FETCH_URL);
     const unparsed = await response.text();
-    const parsed = await parse(unparsed.split("\n"));
+    const parsed = parse(unparsed.split("\n"));
     return await Promise.all([
       redisClient.set(CONDITIONS_KEY, JSON.stringify(parsed.conditions)),
       redisClient.sadd(ROADS_KEY, parsed.roads),

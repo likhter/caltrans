@@ -3,6 +3,9 @@ const isEmptyLine = line => /^\s*$/.test(line);
 const isRoadName = line => /^(I|SR|US)\s+\d+$/.test(line);
 const isRegionName = line => /^\[[^\]]+\]$/.test(line);
 
+const CLOSURE_RE = /closed/i;
+const CHAINS_RE = /chains.*required/i;
+
 class InfoEntry {
   constructor(name) {
     this.name = name;
@@ -11,10 +14,39 @@ class InfoEntry {
   addEntry(entry) {
     this.entries.push(entry);
   }
-  serialize() {
-    return { name: this.name, entries: this.entries };
-  }
 }
+
+class Road extends InfoEntry { 
+  addEntry(region) {
+    super.addEntry(region);
+    this.hasClosures = this.hasClosures || region.hasClosures;
+    this.hasChainControls = this.hasChainControls || region.hasChainControls;
+    this.hasRestrictions = this.hasRestrictions || this.hasClosures || this.hasChainControls;
+  }
+
+  constructor(...args) {
+    super(...args);
+    this.hasClosures = false;
+    this.hasChainControls = false;
+    this.hasRestrictions = false;
+  }
+};
+class Region extends InfoEntry {
+
+  addEntry(textLine) {
+    super.addEntry(textLine);
+    this.hasClosures = this.hasClosures || CLOSURE_RE.test(textLine);
+    this.hasChainControls = this.hasChainControls || CHAINS_RE.test(textLine);
+    this.hasRestrictions = this.hasRestrictions || this.hasClosures || this.hasChainControls;
+  }
+
+  constructor(...args) {
+    super(...args);
+    this.hasClosures = false;
+    this.hasChainControls = false;
+    this.hasRestrictions = false;
+  }
+};
 
 module.exports = function parse(lines) {
   const conditions = [];
@@ -23,11 +55,11 @@ module.exports = function parse(lines) {
   let currentRoad = null;
   let currentRegion = null;
   let gotEmptyLine = false;
-  lines.map(trimLine).forEach(line => {
-    console.log('LINE: ', line);
+  lines.map(trimLine).forEach((line) => {
+    // console.log('LINE: ', line);
     if (isEmptyLine(line)) {
       if (currentRegion && stack.length) {
-        console.log('COLLAPSING NEXT LINES:', stack);
+        // console.log('COLLAPSING NEXT LINES:', stack);
         currentRegion.addEntry(stack.join(' '));
         stack = [];
       }
@@ -43,8 +75,8 @@ module.exports = function parse(lines) {
           }
           conditions.push(currentRoad);
         }
-        console.log('>>> NEW ROAD CREATED:', line);
-        currentRoad = new InfoEntry(line);
+        // console.log('>>> NEW ROAD CREATED:', line);
+        currentRoad = new Road(line);
         roads.push(line);
         currentRegion = null;
         return;
@@ -54,8 +86,8 @@ module.exports = function parse(lines) {
       if (currentRegion) {
         currentRoad.addEntry(currentRegion);
       }
-      currentRegion = new InfoEntry(line);
-      console.log('>>> NEW REGION CREATED: ', line);
+      currentRegion = new Region(line);
+      // console.log('>>> NEW REGION CREATED: ', line);
       return;
     }
     if (currentRegion) {
